@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8">
+        <title>Compiler Tools</title>
+        <link rel="stylesheet" href="dependency/bootstrap.min.css">
+        <link rel="stylesheet" href="frontend/frontend.css">
+        <script data-main="frontend/main" src="dependency/require.js"></script>
+    </head>
+
+    <body>
+        <div class="container">
+            <h1>Compiler Tools</h1>
+            <textarea class="form-control" rows="8" id="ct-grammar" placeholder="Enter productions..."></textarea>
+
+            <hr>
+
+            <div class="row">
+                <div class="col-lg-2">
+                    <ul class="nav nav-pills nav-stacked" role="tablist">
+                        <li class="active ct-tool-menuitem">
+                            <a href="#usage" role="tab" data-toggle="tab">Usage</a>
+                        </li>
+                        <li class="ct-tool-menuitem">
+                            <a href="#firstset" role="tab" data-toggle="tab">First Set</a>
+                        </li>
+                        <li class="ct-tool-menuitem">
+                            <a href="#followset" role="tab" data-toggle="tab">Follow Set</a>
+                        </li>
+                        <li class="ct-tool-menuitem">
+                            <a href="#ll1table" role="tab" data-toggle="tab">LL(1) Table</a>
+                        </li>
+                        <li class="ct-tool-menuitem">
+                            <a href="#ll1derivation" role="tab" data-toggle="tab">LL(1) Derivation</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-10">
+                    <div class="tab-content">
+                    <div class="tab-pane active" id="usage">
+                    </div>
+
+                    <div class="tab-pane" id="firstset">
+                    </div>
+
+                    <div class="tab-pane" id="followset">
+                    </div>
+
+                    <div class="tab-pane" id="ll1table">
+                        LL(1) Table
+                    </div>
+
+                    <div class="tab-pane" id="ll1derivation">
+                        LL(1) Derivation
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
