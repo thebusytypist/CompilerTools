@@ -16,9 +16,11 @@ require.config({
 
 require(
     ["dependency/qunit",
-     "test/first"],
+     "test/grammarparsertest"],
 
     function() {
-        QUnit.load();
-        QUnit.start();
+        
+QUnit.load();
+QUnit.start();
+
 });

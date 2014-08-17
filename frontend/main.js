@@ -15,4 +15,11 @@ require(
     ["dependency/jquery",
      "dependency/bootstrap"],
     function() {
+
+var grammarTextarea = document.getElementById("ct-grammar");
+var onGrammarTextareaInput = function(e) {
+    var text = e.target.value;
+};
+grammarTextarea.addEventListener("input", onGrammarTextareaInput);
+
 });
