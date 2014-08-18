@@ -12,7 +12,24 @@ require.config({
 });
 
 require(
-    ["dependency/jquery",
+    ["frontend/grammarast",
      "dependency/bootstrap"],
-    function() {
+    function(grammarast) {
+
+var grammarContainer = document.getElementById("ct-grammar-container");
+var grammarTextarea = document.getElementById("ct-grammar");
+var onGrammarTextareaInput = function(e) {
+    var text = e.target.value;
+    var r = grammarast.UpdateGrammarAST(text);
+    if (r === true) {
+        grammarContainer.classList.remove("has-error");
+        grammarContainer.classList.add("has-success");
+    }
+    else {
+        grammarContainer.classList.remove("has-success");
+        grammarContainer.classList.add("has-error");
+    }
+};
+grammarTextarea.addEventListener("input", onGrammarTextareaInput);
+
 });
