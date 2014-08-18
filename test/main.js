@@ -16,7 +16,8 @@ require.config({
 
 require(
     ["dependency/qunit",
-     "test/grammarparsertest"],
+     "test/grammarparsertest",
+     "test/firstsettest"],
 
     function() {
         

@@ -91,10 +91,6 @@ var SymbolAST = function(token) {
     this.IsTerminal = function() {
         return token.Type === TokenType.TERMINAL;
     };
-    this.IsEqualTo = function(s) {
-        return s.IsTerminal() === this.IsTerminal() &&
-               s.GetValue() === this.GetValue();
-    }
     return this;
 };
 

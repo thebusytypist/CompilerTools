@@ -32,6 +32,15 @@ QUnit.test("Tokenizer", function() {
     strictEqual(tokenList[5].Value, ".");
 });
 
+QUnit.test("Tokenizer Empty", function() {
+    expect(1);
+
+    var src = " ";
+    var tokenList = parser.Tokenize(src);
+
+    strictEqual(tokenList.length, 0);
+});
+
 QUnit.test("Tokenizer Multiline", function() {
     expect(16);
 

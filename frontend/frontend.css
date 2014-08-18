@@ -3,6 +3,11 @@
     font-family: monospace;
 }
 
+#ct-firstset-symbols {
+    resize: vertical;
+    font-family: monospace;
+}
+
 .ct-tool-menuitem {
     font-variant: small-caps;
 }
