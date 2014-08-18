@@ -10,26 +10,26 @@ QUnit.test("Tokenizer", function() {
 
     var src = "a ::= b ADD c.";
     var tokenList = parser.Tokenize(src);
-    equal(tokenList.length, 6);
-    equal(parser.IsValidTokenList(tokenList), true);
+    strictEqual(tokenList.length, 6);
+    strictEqual(parser.IsValidTokenList(tokenList), true);
 
-    equal(tokenList[0].Type, parser.TokenType.NONTERMINAL);
-    equal(tokenList[0].Value, "a");
+    strictEqual(tokenList[0].Type, parser.TokenType.NONTERMINAL);
+    strictEqual(tokenList[0].Value, "a");
 
-    equal(tokenList[1].Type, parser.TokenType.EQUAL);
-    equal(tokenList[1].Value, "::=");
+    strictEqual(tokenList[1].Type, parser.TokenType.EQUAL);
+    strictEqual(tokenList[1].Value, "::=");
 
-    equal(tokenList[2].Type, parser.TokenType.NONTERMINAL);
-    equal(tokenList[2].Value, "b");
+    strictEqual(tokenList[2].Type, parser.TokenType.NONTERMINAL);
+    strictEqual(tokenList[2].Value, "b");
 
-    equal(tokenList[3].Type, parser.TokenType.TERMINAL);
-    equal(tokenList[3].Value, "ADD");
+    strictEqual(tokenList[3].Type, parser.TokenType.TERMINAL);
+    strictEqual(tokenList[3].Value, "ADD");
 
-    equal(tokenList[4].Type, parser.TokenType.NONTERMINAL);
-    equal(tokenList[4].Value, "c");
+    strictEqual(tokenList[4].Type, parser.TokenType.NONTERMINAL);
+    strictEqual(tokenList[4].Value, "c");
 
-    equal(tokenList[5].Type, parser.TokenType.DOT);
-    equal(tokenList[5].Value, ".");
+    strictEqual(tokenList[5].Type, parser.TokenType.DOT);
+    strictEqual(tokenList[5].Value, ".");
 });
 
 QUnit.test("Tokenizer Multiline", function() {
@@ -37,29 +37,29 @@ QUnit.test("Tokenizer Multiline", function() {
 
     var src = "a ::= .\nb ::= SYMBOL.";
     var tokenList = parser.Tokenize(src);
-    equal(tokenList.length, 7);
-    equal(parser.IsValidTokenList(tokenList), true);
+    strictEqual(tokenList.length, 7);
+    strictEqual(parser.IsValidTokenList(tokenList), true);
 
-    equal(tokenList[0].Type, parser.TokenType.NONTERMINAL);
-    equal(tokenList[0].Value, "a");
+    strictEqual(tokenList[0].Type, parser.TokenType.NONTERMINAL);
+    strictEqual(tokenList[0].Value, "a");
 
-    equal(tokenList[1].Type, parser.TokenType.EQUAL);
-    equal(tokenList[1].Value, "::=");
+    strictEqual(tokenList[1].Type, parser.TokenType.EQUAL);
+    strictEqual(tokenList[1].Value, "::=");
 
-    equal(tokenList[2].Type, parser.TokenType.DOT);
-    equal(tokenList[2].Value, ".");
+    strictEqual(tokenList[2].Type, parser.TokenType.DOT);
+    strictEqual(tokenList[2].Value, ".");
 
-    equal(tokenList[3].Type, parser.TokenType.NONTERMINAL);
-    equal(tokenList[3].Value, "b");
+    strictEqual(tokenList[3].Type, parser.TokenType.NONTERMINAL);
+    strictEqual(tokenList[3].Value, "b");
 
-    equal(tokenList[4].Type, parser.TokenType.EQUAL);
-    equal(tokenList[4].Value, "::=");
+    strictEqual(tokenList[4].Type, parser.TokenType.EQUAL);
+    strictEqual(tokenList[4].Value, "::=");
 
-    equal(tokenList[5].Type, parser.TokenType.TERMINAL);
-    equal(tokenList[5].Value, "SYMBOL");
+    strictEqual(tokenList[5].Type, parser.TokenType.TERMINAL);
+    strictEqual(tokenList[5].Value, "SYMBOL");
 
-    equal(tokenList[6].Type, parser.TokenType.DOT);
-    equal(tokenList[6].Value, ".");
+    strictEqual(tokenList[6].Type, parser.TokenType.DOT);
+    strictEqual(tokenList[6].Value, ".");
 });
 
 QUnit.test("Tokenizer Failure", function() {
@@ -67,7 +67,7 @@ QUnit.test("Tokenizer Failure", function() {
     
     var src = "a -> b.";
     var tokenList = parser.Tokenize(src);
-    equal(parser.IsValidTokenList(tokenList), false);
+    strictEqual(parser.IsValidTokenList(tokenList), false);
 });
 
 
@@ -78,26 +78,47 @@ QUnit.test("Parser", function() {
     // var src = "a ::= SYMBOL.";
     var tokenList = parser.Tokenize(src);
     var r = parser.Parse(tokenList);
-    notEqual(r, undefined);
+    notStrictEqual(r, null);
 
-    equal(r.GetProductionCount(), 2);
+    strictEqual(r.GetProductionCount(), 2);
 
     var firstProduction = r.GetProduction(0);
     var firstHead = firstProduction.GetHead();
-    equal(firstHead.IsTerminal(), false);
+    strictEqual(firstHead.IsTerminal(), false);
     var firstBody = firstProduction.GetBody();
-    equal(firstBody.GetSymbolCount(), 3);
-    equal(firstBody.GetSymbol(0).GetValue(), "SYMBOL");
-    equal(firstBody.GetSymbol(1).GetValue(), "ADD");
-    equal(firstBody.GetSymbol(2).GetValue(), "SYMBOL");
+    strictEqual(firstBody.GetSymbolCount(), 3);
+    strictEqual(firstBody.GetSymbol(0).GetValue(), "SYMBOL");
+    strictEqual(firstBody.GetSymbol(1).GetValue(), "ADD");
+    strictEqual(firstBody.GetSymbol(2).GetValue(), "SYMBOL");
 
     var secondProduction = r.GetProduction(1);
     var secondHead = secondProduction.GetHead();
-    equal(secondHead.IsTerminal(), false);
+    strictEqual(secondHead.IsTerminal(), false);
     var secondBody = secondProduction.GetBody();
-    equal(secondBody.GetSymbolCount(), 2);
-    equal(secondBody.GetSymbol(0).GetValue(), "MINUS");
-    equal(secondBody.GetSymbol(1).GetValue(), "a");
+    strictEqual(secondBody.GetSymbolCount(), 2);
+    strictEqual(secondBody.GetSymbol(0).GetValue(), "MINUS");
+    strictEqual(secondBody.GetSymbol(1).GetValue(), "a");
+});
+
+QUnit.test("Parser Empty", function() {
+    expect(3);
+
+    var src = "";
+    var tokenList = parser.Tokenize(src);
+    strictEqual(tokenList.length, 0);
+    var r = parser.Parse(tokenList);
+    notStrictEqual(r, null);
+
+    strictEqual(r.GetProductionCount(), 0);
+});
+
+QUnit.test("Parser Failure", function() {
+    expect();
+
+    var src = "a ::= ";
+    var tokenList = parser.Tokenize(src);
+    var r = parser.Parse(tokenList);
+    strictEqual(r, null);
 });
 
 });

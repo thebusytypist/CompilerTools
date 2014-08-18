@@ -265,7 +265,7 @@ var Handler = function() {
     var head = undefined;
     var body = undefined;
     var productions = [];
-    var grammar = undefined;
+    var grammar = null;
 
     // Handle specific productions on current token.
     this.Handle = function(p, token) {
