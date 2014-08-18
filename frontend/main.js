@@ -36,6 +36,9 @@ var onGrammarTextareaInput = function(e) {
         grammarContainer.classList.remove("has-success");
         grammarContainer.classList.add("has-error");
     }
+
+    // Update displays which depends on grammar.
+    updateFirstSetResult(fsSyms.value);
 };
 grammarTextarea.addEventListener("input", onGrammarTextareaInput);
 
@@ -44,10 +47,9 @@ grammarTextarea.addEventListener("input", onGrammarTextareaInput);
 // -----------------------------------------------------------------------------
 var fsSymsContainer = document.getElementById("ct-firstset-symbols-container");
 var fsSyms = document.getElementById("ct-firstset-symbols");
-var onSymbolsInput = function(e) {
-    var text = e.target.value;
+var updateFirstSetResult = function(text) {
     var symbols = grammarparser.Tokenize(text);
-    if (symbols.length === 0) {
+    if (symbols.length === 0 || grammarast.GetGrammarAST() === null) {
         fsSymsContainer.classList.remove("has-success");
         fsSymsContainer.classList.remove("has-error");
     }
@@ -61,6 +63,10 @@ var onSymbolsInput = function(e) {
             fsSymsContainer.classList.add("has-error");
         }
     }
+};
+var onSymbolsInput = function(e) {
+    var text = e.target.value;
+    updateFirstSetResult(text);
 };
 fsSyms.addEventListener("input", onSymbolsInput);
 

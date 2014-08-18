@@ -1,4 +1,4 @@
-define(function() {
+define(["src/grammarparser"], function(grammarparser) {
 
 var IsTokenDefinedInHead = function(head, token) {
     return head.GetValue() === token.Value;
@@ -35,13 +35,24 @@ var Validate = function(ast, symbols) {
     return true;
 };
 
-var Calculate = function(ast, symbols) {
+var CalculateFirstSetOfNonTerminal = function(ast, symbol) {
+    for (var i = 0, count = ast.GetProductionCount(); i < count; ++i) {
 
+    }
+};
+
+var CalculateFirstSetOfSymbols = function(ast, symbols) {
+    for (var i = 0, count = symbols.length; i < count; ++i) {
+        if (symbols[i].Type === grammarparser.TokenType.NONTERMINAL)
+            var fs = CalculateFirstSetOfNonTerminal(ast, symbols[i]);
+        else {
+        }
+    }
 };
 
 return {
     "Validate": Validate,
-    "Calculate": Calculate
+    "Calculate": CalculateFirstSetOfSymbols
 };
 
 });
