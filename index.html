@@ -15,6 +15,7 @@
                 <textarea class="form-control"
                           rows="8"
                           id="ct-grammar"
+                          spellcheck="false"
                           placeholder="Enter productions..."></textarea>
             </div>
 
@@ -24,39 +25,52 @@
                 <div class="col-lg-2">
                     <ul class="nav nav-pills nav-stacked" role="tablist">
                         <li class="active ct-tool-menuitem">
-                            <a href="#usage" role="tab" data-toggle="tab">Usage</a>
+                            <a href="#ct-usage" role="tab" data-toggle="tab">Usage</a>
                         </li>
                         <li class="ct-tool-menuitem">
-                            <a href="#firstset" role="tab" data-toggle="tab">First Set</a>
+                            <a href="#ct-firstset" role="tab" data-toggle="tab">First Set</a>
                         </li>
                         <li class="ct-tool-menuitem">
-                            <a href="#followset" role="tab" data-toggle="tab">Follow Set</a>
+                            <a href="#ct-followset" role="tab" data-toggle="tab">Follow Set</a>
                         </li>
                         <li class="ct-tool-menuitem">
-                            <a href="#ll1table" role="tab" data-toggle="tab">LL(1) Table</a>
+                            <a href="#ct-ll1table" role="tab" data-toggle="tab">LL(1) Table</a>
                         </li>
                         <li class="ct-tool-menuitem">
-                            <a href="#ll1derivation" role="tab" data-toggle="tab">LL(1) Derivation</a>
+                            <a href="#ct-ll1derivation" role="tab" data-toggle="tab">LL(1) Derivation</a>
                         </li>
                     </ul>
                 </div>
 
                 <div class="col-lg-10">
                     <div class="tab-content">
-                        <div class="tab-pane active" id="usage">
+                        <div class="tab-pane active" id="ct-usage">
                         </div>
 
-                        <div class="tab-pane" id="firstset">
+                        <div class="tab-pane" id="ct-firstset">
+                            <div id="ct-firstset-symbols-container">
+                                <textarea class="form-control"
+                                          rows="1"
+                                          id="ct-firstset-symbols"
+                                          spellcheck="false"
+                                          placeholder="Enter string of symbols..."></textarea>
+                            </div>
+
+                            <hr>
+                            
+                            <div id="ct-firstset-result" class="well">
+                            </div>
                         </div>
 
-                        <div class="tab-pane" id="followset">
+                        <div class="tab-pane" id="ct-followset">
+                            FOLLOW set
                         </div>
 
-                        <div class="tab-pane" id="ll1table">
+                        <div class="tab-pane" id="ct-ll1table">
                             LL(1) Table
                         </div>
 
-                        <div class="tab-pane" id="ll1derivation">
+                        <div class="tab-pane" id="ct-ll1derivation">
                             LL(1) Derivation
                         </div>
                     </div>

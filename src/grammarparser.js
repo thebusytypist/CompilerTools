@@ -7,13 +7,13 @@ var TokenType = {
     DOT: 3
 };
 
-var Token = function(type, text) {
+var Token = function(type, value) {
     this.Type = type;
-    this.Value = text;
+    this.Value = value;
     return this;
 };
 
-var Tokenize = function(text) {
+var TokenizeRaw = function(text) {
     // Isolate the dots(".") form their neighbors.
     var list = text.replace(/\n/g, " ")
                    .split(".")
@@ -28,12 +28,12 @@ var Tokenize = function(text) {
         /^\.$/        // Dot
     ];
 
-    var map = function(s) {
-        for (var t in TokenType) {
-            var v = TokenType[t];
-            if (v !== TokenType.INVALID) {
-                if (patterns[v].test(s))
-                    return new Token(v, s);
+    var map = function(v) {
+        for (var i in TokenType) {
+            var t = TokenType[i];
+            if (t !== TokenType.INVALID) {
+                if (patterns[t].test(v))
+                    return new Token(t, v);
             }
         }
 
@@ -49,6 +49,26 @@ var IsValidTokenList = function(tokens) {
             return false;
     }
     return true;
+};
+
+var IsValidSentence = function(tokens) {
+    for (var i = 0, count = tokens.length; i < count; ++i) {
+        if (tokens[i].Type !== TokenType.TERMINAL &&
+            tokens[i].Type !== TokenType.NONTERMINAL)
+            return false;
+    }
+    return true;
+};
+
+var ParseSentence = function(text) {
+    var tokens = TokenizeRaw(text);
+    
+    if (!IsValidSentence(tokens))
+        return null;
+
+    return tokens.map(function(t) {
+        return new SymbolAST(t);
+    });
 };
 
 var GrammarAST = function(productions) {
@@ -78,6 +98,9 @@ var BodyAST = function(symbols) {
     this.GetSymbol = function(i) {
         return symbols[i];
     };
+    this.GetSymbols = function() {
+        return symbols;
+    }
     this.IsEmpty = function() {
         return symbols.length === 0;
     };
@@ -91,10 +114,6 @@ var SymbolAST = function(token) {
     this.IsTerminal = function() {
         return token.Type === TokenType.TERMINAL;
     };
-    this.IsEqualTo = function(s) {
-        return s.IsTerminal() === this.IsTerminal() &&
-               s.GetValue() === this.GetValue();
-    }
     return this;
 };
 
@@ -302,7 +321,7 @@ var Handler = function() {
     return this;
 };
 
-var Parse = function(tokens) {
+var ParseRaw = function(tokens) {
     // Append ending mark.
     var t = tokens.concat(["$"]);
 
@@ -355,10 +374,15 @@ var Parse = function(tokens) {
     return handler.GetASTRoot();
 };
 
+var Parse = function(text) {
+    var tokens = TokenizeRaw(text);
+    if (!IsValidTokenList(tokens))
+        return null;
+    return ParseRaw(tokens);
+};
+
 return {
-    "TokenType": TokenType,
-    "Tokenize": Tokenize,
-    "IsValidTokenList": IsValidTokenList,
+    "ParseSentence": ParseSentence,
     "Parse": Parse
 };
 
