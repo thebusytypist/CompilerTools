@@ -47,20 +47,34 @@ grammarTextarea.addEventListener("input", onGrammarTextareaInput);
 // -----------------------------------------------------------------------------
 var fsSymsContainer = document.getElementById("ct-firstset-symbols-container");
 var fsSyms = document.getElementById("ct-firstset-symbols");
+var fsResult = document.getElementById("ct-firstset-result");
 var updateFirstSetResult = function(text) {
-    var symbols = grammarparser.Tokenize(text);
-    if (symbols.length === 0 || grammarast.GetGrammarAST() === null) {
+    var isWhitespace = function(t) {
+        var p = /^\s*$/;
+        return p.test(t);
+    };
+
+    var display = function(result) {
+        var content = result.join(" ");
+        fsResult.textContent = content;
+    };
+
+    if (isWhitespace(text) || grammarast.GetGrammarAST() === null) {
         fsSymsContainer.classList.remove("has-success");
         fsSymsContainer.classList.remove("has-error");
+        display([]);
     }
     else {
-        if (firstset.Validate(grammarast.GetGrammarAST(), symbols)) {
+        var s = firstset.Calculate(grammarast.GetGrammarAST(), text);
+        if (s !== null) {
             fsSymsContainer.classList.remove("has-error");
             fsSymsContainer.classList.add("has-success");
+            display(s);
         }
         else {
             fsSymsContainer.classList.remove("has-success");
             fsSymsContainer.classList.add("has-error");
+            display([]);
         }
     }
 };
@@ -70,4 +84,7 @@ var onSymbolsInput = function(e) {
 };
 fsSyms.addEventListener("input", onSymbolsInput);
 
+// -----------------------------------------------------------------------------
+// 
+// -----------------------------------------------------------------------------
 });
