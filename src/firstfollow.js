@@ -88,7 +88,7 @@ var CalculateFirstSetOfSymbols = function(ast, symbols) {
     return s;
 };
 
-var CalculateRaw = function(ast, text) {
+var CalculateFirstSetRaw = function(ast, text) {
     var symbols = grammarparser.ParseSentence(text);
 
     if (symbols === null || !IsDefinedSentence(ast, symbols))
@@ -97,8 +97,8 @@ var CalculateRaw = function(ast, text) {
     return CalculateFirstSetOfSymbols(ast, symbols);
 };
 
-var DumpFIRSTSetToArray = function(ast, text) {
-    var first = CalculateRaw(ast, text);
+var DumpRawFirstSetToArray = function(ast, text) {
+    var first = CalculateFirstSetRaw(ast, text);
 
     if (first === null)
         return null;
@@ -120,7 +120,7 @@ var DumpFIRSTSetToArray = function(ast, text) {
 };
 
 return {
-    "Calculate": DumpFIRSTSetToArray
+    "CalculateFirstSet": DumpRawFirstSetToArray
 };
 
 });

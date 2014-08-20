@@ -14,11 +14,11 @@ require.config({
 require(
     ["frontend/grammarast",
      "src/grammarparser",
-     "src/firstset",
+     "src/firstfollow",
      "dependency/bootstrap"],
     function(grammarast,
              grammarparser,
-             firstset) {
+             firstfollow) {
 
 // -----------------------------------------------------------------------------
 // Grammar
@@ -65,7 +65,7 @@ var updateFirstSetResult = function(text) {
         display([]);
     }
     else {
-        var s = firstset.Calculate(grammarast.GetGrammarAST(), text);
+        var s = firstfollow.CalculateFirstSet(grammarast.GetGrammarAST(), text);
         if (s !== null) {
             fsSymsContainer.classList.remove("has-error");
             fsSymsContainer.classList.add("has-success");
