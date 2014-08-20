@@ -1,5 +1,9 @@
 define(["src/grammarparser"], function(grammarparser) {
 
+// -----------------------------------------------------------------------------
+// First Set
+// -----------------------------------------------------------------------------
+
 var IsSymbolDefinedInHead = function(head, symbol) {
     return head.GetValue() === symbol.GetValue();
 };
@@ -33,6 +37,19 @@ var IsDefinedSentence = function(ast, symbols) {
             return false;
     }
     return true;
+};
+
+var MergeSetExceptEmpty = function(a, b) {
+    var r = new Set;
+    a.forEach(function(e) {
+        if (e !== null)
+            r.add(e);
+    });
+    b.forEach(function(e) {
+        if (e !== null)
+            r.add(e);
+    });
+    return r;
 };
 
 var MergeSet = function(a, b) {
@@ -76,7 +93,10 @@ var CalculateFirstSetOfSymbols = function(ast, symbols) {
     for (var i = 0, count = symbols.length; i < count; ++i) {
         if (!symbols[i].IsTerminal()) {
             var n = CalculateFirstSetOfNonTerminal(ast, symbols[i]);
-            s = MergeSet(s, n);
+            s = MergeSetExceptEmpty(s, n);
+            if (i === count - 1 && n.has(null))
+                s.add(null);
+
             if (!n.has(null))
                 break;
         }
@@ -119,6 +139,14 @@ var DumpRawFirstSetToArray = function(ast, text) {
     return r;
 };
 
+// -----------------------------------------------------------------------------
+// Follow Set
+// -----------------------------------------------------------------------------
+
+
+// -----------------------------------------------------------------------------
+// Export
+// -----------------------------------------------------------------------------
 return {
     "CalculateFirstSet": DumpRawFirstSetToArray
 };
