@@ -1,12 +1,12 @@
 require(
     ["dependency/qunit",
      "src/grammarparser",
-     "src/firstset"
-    ], function(QUnit, parser, firstset) {
+     "src/firstfollow"
+    ], function(QUnit, parser, firstfollow) {
 
 QUnit.module("FIRST Set");
 
-QUnit.test("Calculate Terminal", function() {
+QUnit.test("CalculateFirstSet Terminal", function() {
     expect(4);
 
     var src = "s ::= A ADD B.";
@@ -14,13 +14,13 @@ QUnit.test("Calculate Terminal", function() {
     notStrictEqual(r, null);
 
     var input = "B";
-    var s = firstset.Calculate(r, input);
+    var s = firstfollow.CalculateFirstSet(r, input);
     notStrictEqual(s, null);
     strictEqual(s.length, 1);
     strictEqual(s[0], "B");
 });
 
-QUnit.test("Calculate Non-terminal", function() {
+QUnit.test("CalculateFirstSet Non-terminal", function() {
     expect(4);
 
     var src = "s ::= A ADD B.";
@@ -28,13 +28,13 @@ QUnit.test("Calculate Non-terminal", function() {
     notStrictEqual(r, null);
 
     var input = "s";
-    var s = firstset.Calculate(r, input);
+    var s = firstfollow.CalculateFirstSet(r, input);
     notStrictEqual(s, null);
     strictEqual(s.length, 1);
     strictEqual(s[0], "A");
 });
 
-QUnit.test("Calculate Empty Production", function() {
+QUnit.test("CalculateFirstSet Empty Production", function() {
     expect(5);
 
     var src = "s ::= A ADD B.\n s ::=.";
@@ -42,11 +42,25 @@ QUnit.test("Calculate Empty Production", function() {
     notStrictEqual(r, null);
 
     var input = "s";
-    var s = firstset.Calculate(r, input);
+    var s = firstfollow.CalculateFirstSet(r, input);
     notStrictEqual(s, null);
     strictEqual(s.length, 2);
     strictEqual(s[0], "A");
     strictEqual(s[1], "ε");
+});
+
+QUnit.test("CalculateFirstSet Null At Beginning", function() {
+    expect(4);
+
+    var src = "s ::= body END.\n body ::= .";
+    var r = parser.Parse(src);
+    notStrictEqual(r, null);
+
+    var input = "body END";
+    var s = firstfollow.CalculateFirstSet(r, input);
+    notStrictEqual(s, null);
+    strictEqual(s.length, 1);
+    strictEqual(s[0], "END");
 });
 
 });
