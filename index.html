@@ -12,7 +12,7 @@
         <div class="container">
             <h1>Compiler Tools</h1>
             <div id="ct-grammar-container" class="has-success">
-                <textarea class="form-control"
+                <textarea class="form-control ct-monospace"
                           rows="8"
                           id="ct-grammar"
                           spellcheck="false"
@@ -33,23 +33,47 @@
                         <li class="ct-tool-menuitem">
                             <a href="#ct-followset" role="tab" data-toggle="tab">Follow Set</a>
                         </li>
+                        <!--
                         <li class="ct-tool-menuitem">
                             <a href="#ct-ll1table" role="tab" data-toggle="tab">LL(1) Table</a>
                         </li>
                         <li class="ct-tool-menuitem">
                             <a href="#ct-ll1derivation" role="tab" data-toggle="tab">LL(1) Derivation</a>
                         </li>
+                        -->
                     </ul>
                 </div>
 
                 <div class="col-lg-10">
                     <div class="tab-content">
                         <div class="tab-pane active" id="ct-usage">
+                            <p>
+                                This tool reads grammar input in a syntax which is similar to <a href="http://www.hwaci.com/sw/lemon/lemon.html">Lemon Parser</a>.
+                            </p>
+
+                            <p>
+                                The head of first production is assumed to be the start symbol.
+                            </p>
+
+                            <p>
+                                Following is the example 4.27 from the Dragon Book written in Lemon parser syntax:
+                            </p>
+
+                            <div class="well ct-monospace">
+                                e ::= t erhs.<br>
+                                erhs ::= ADD t erhs.<br>
+                                erhs ::= .<br>
+                                t ::= f trhs.<br>
+                                trhs ::= TIMES f trhs.<br>
+                                trhs ::= .<br>
+                                f ::= LP e RP.<br>
+                                f ::= ID.<br>
+                            </div>
                         </div>
 
                         <div class="tab-pane" id="ct-firstset">
                             <div id="ct-firstset-symbols-container">
-                                <textarea class="form-control"
+                                <textarea class="form-control ct-monospace"
                                           rows="1"
                                           id="ct-firstset-symbols"
                                           spellcheck="false"
@@ -58,7 +82,7 @@
 
                             <hr>
                             
-                            <div id="ct-firstset-result" class="well">
+                            <div id="ct-firstset-result" class="well ct-monospace">
                             </div>
                         </div>
 
@@ -68,6 +92,7 @@
                             </table>
                         </div>
 
+                        <!--
                         <div class="tab-pane" id="ct-ll1table">
                             LL(1) Table
                         </div>
@@ -75,6 +100,7 @@
                         <div class="tab-pane" id="ct-ll1derivation">
                             LL(1) Derivation
                         </div>
+                        -->
                     </div>
                 </div>
             </div>

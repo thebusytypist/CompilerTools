@@ -99,10 +99,10 @@ var updateFollowSetResult = function() {
         for (var k in r) {
             var v = r[k];
             var t = v.join(" ");
-            var c = "<tr><td>" +
+            var c = "<tr><td class='ct-monospace'>" +
                     k +
                     "</td>" +
-                    "<td>" +
+                    "<td class='ct-monospace'>" +
                     t +
                     "</td></tr>";
             content = content + c;
