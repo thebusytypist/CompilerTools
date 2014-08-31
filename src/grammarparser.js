@@ -148,7 +148,7 @@ var SymbolAST = function(token) {
     body: {DOT}
     symbollist: {DOT}
     symbollistrhs: {DOT}
-    symbol: {NONTERMINAL, DOT}
+    symbol: {TERMINAL, NONTERMINAL, DOT}
 */
 /*  Parsing table for grammar parser:
     

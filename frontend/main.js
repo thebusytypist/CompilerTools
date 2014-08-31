@@ -39,6 +39,7 @@ var onGrammarTextareaInput = function(e) {
 
     // Update displays which depends on grammar.
     updateFirstSetResult(fsSyms.value);
+    updateFollowSetResult();
 };
 grammarTextarea.addEventListener("input", onGrammarTextareaInput);
 
@@ -83,6 +84,33 @@ var onSymbolsInput = function(e) {
     updateFirstSetResult(text);
 };
 fsSyms.addEventListener("input", onSymbolsInput);
+
+// -----------------------------------------------------------------------------
+// FOLLOW Set
+// -----------------------------------------------------------------------------
+var followSetResult = document.getElementById("ct-followset-result");
+var updateFollowSetResult = function() {
+    followSetResult.innerHTML = "";
+    var head = "<tr><th>Non-Terminal</th>" +
+                   "<th>FOLLOW Set</th></tr>";
+    var content = head;
+    if (grammarast.GetGrammarAST() !== null) {
+        var r = firstfollow.CalculateFollowSets(grammarast.GetGrammarAST());
+        for (var k in r) {
+            var v = r[k];
+            var t = v.join(" ");
+            var c = "<tr><td>" +
+                    k +
+                    "</td>" +
+                    "<td>" +
+                    t +
+                    "</td></tr>";
+            content = content + c;
+        };
+    }
+
+    followSetResult.innerHTML = content;
+};
 
 // -----------------------------------------------------------------------------
 // 
