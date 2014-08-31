@@ -108,7 +108,7 @@ var CalculateFirstSetOfSymbols = function(ast, symbols) {
     return s;
 };
 
-var CalculateFirstSetRaw = function(ast, text) {
+var CalculateFirstSet = function(ast, text) {
     var symbols = grammarparser.ParseSentence(text);
 
     if (symbols === null || !IsDefinedSentence(ast, symbols))
@@ -117,8 +117,8 @@ var CalculateFirstSetRaw = function(ast, text) {
     return CalculateFirstSetOfSymbols(ast, symbols);
 };
 
-var DumpRawFirstSetToArray = function(ast, text) {
-    var first = CalculateFirstSetRaw(ast, text);
+var DumpFirstSetToArray = function(ast, text) {
+    var first = CalculateFirstSet(ast, text);
 
     if (first === null)
         return null;
@@ -143,12 +143,135 @@ var DumpRawFirstSetToArray = function(ast, text) {
 // Follow Set
 // -----------------------------------------------------------------------------
 
+var InitializeFollowSets = function(ast) {
+    var m = new Map;
+
+    var AddNonTerminal = function(symbol) {
+        var v = symbol.GetValue();
+        if (!m.has(v)) {
+            var s = new Set;
+            m.set(v, s);
+        }
+    };
+
+    // Create table of follow set for all non-terminals.
+    for (var i = 0, count = ast.GetProductionCount(); i < count; ++i) {
+        var p = ast.GetProduction(i);
+
+        AddNonTerminal(p.GetHead());
+
+        for (var j = 0, c = p.GetBody().GetSymbolCount(); j < c; ++j) {
+            var s = p.GetBody().GetSymbol(j);
+            if (!s.IsTerminal())
+                AddNonTerminal(s);
+        }
+    }
+
+    // Initialize follow set for start symbol.
+    if (ast.GetProductionCount() > 0) {
+        var p = ast.GetProduction(0);
+        var head = p.GetHead();
+        m.get(head.GetValue()).add("$");
+    }
+
+    return m;
+};
+
+var CalculateFollowSets = function(ast) {
+    var m = InitializeFollowSets(ast);
+
+    // Cache first set of items in ast.
+    // The key for cache element is
+    // (production-index, start-item-index-of-body)
+    var firstSets = [];
+    var GetFirstSet = function(pi, ii) {
+        if (firstSets[pi] === undefined)
+            firstSets[pi] = [];
+        if (firstSets[pi][ii] === undefined) {
+            var s = ast.GetProduction(pi).GetBody().GetSymbols().slice(ii);
+            firstSets[pi][ii] = CalculateFirstSetOfSymbols(ast, s);
+        }
+        return firstSets[pi][ii];
+    };
+
+    // Iteratively update follow sets until no change take place.
+    var UpdateFollowSets = function() {
+        var changed = false;
+
+        var productionCount = ast.GetProductionCount();
+        for (var i = 0; i < productionCount; ++i) {
+            var p = ast.GetProduction(i);
+            var body = p.GetBody();
+
+            var count = body.GetSymbolCount();
+            var s = body.GetSymbols();
+
+            for (var j = 0; j < count; ++j) {
+                if (s[j].IsTerminal())
+                    continue;
+
+                // Get first set of suffix.
+                var fs = GetFirstSet(i, j + 1);
+                var k = s[j].GetValue();
+
+                if (j !== count - 1) {
+                    // For A -> aBb where b does not contain only empty.
+                    var r = m.get(k);
+                    var oldSize = r.size;
+                    m.set(k, MergeSetExceptEmpty(r, fs));
+
+                    if (oldSize !== m.get(k).size)
+                        changed = true;
+                }
+
+                if (j === count - 1 || fs.has(null)) {
+                    // For A -> aB or
+                    // A -> aBb where b contains empty.
+                    var r = m.get(k);
+                    var oldSize = r.size;
+                    var h = p.GetHead().GetValue();
+                    m.set(k, MergeSet(r, m.get(h)));
+
+                    if (oldSize !== m.get(k).size)
+                        changed = true;
+                }
+            }
+        }
+
+        return changed;
+    };
+
+    while (UpdateFollowSets());
+
+    return m;
+};
+
+var DumpRawFollowSetsToObject = function(ast) {
+    var m = CalculateFollowSets(ast);
+
+    var r = {};
+    m.forEach(function(v, k) {
+        r[k] = [];
+        var hasEndMark = false;
+        v.forEach(function(e) {
+            if (e === "$")
+                hasEndMark = true;
+            else
+                r[k].push(e);
+        });
+        // Always put end mark at the end.
+        if (hasEndMark)
+            r[k].push("$");
+    });
+    return r;
+};
 
 // -----------------------------------------------------------------------------
 // Export
 // -----------------------------------------------------------------------------
 return {
-    "CalculateFirstSet": DumpRawFirstSetToArray
+    "CalculateFirstSet": DumpFirstSetToArray,
+    "CalculateFollowSets": DumpRawFollowSetsToObject
 };
 
 });
